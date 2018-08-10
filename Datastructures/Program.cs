@@ -10,8 +10,13 @@ namespace Datastructures
     {
         static void Main(string[] args)
         {
-            var root = BinarySearchTree.CreateBSTFor(new[] { 3, 100, 50, 200, -100, 35, 121, 2 });
-            BinarySearchTree.InOrderTraversel(root);
+            //AmazonTests.StringCompression();
+            //BinarySearchTree.Test();
+            //AmazonTests.MaximumSubArray_v2();
+
+            AmazonTests.AllSubArrays(10,3);
+
+
             Console.ReadLine();
         }
     }

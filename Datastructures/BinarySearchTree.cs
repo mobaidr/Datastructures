@@ -15,36 +15,115 @@ namespace Datastructures
 
     public class BinarySearchTree
     {
-        public static BSTNode CreateBSTFor(IEnumerable<int> values)
+        private BSTNode _root = null;
+
+        class BSTNode
         {
-            return CreateBSTForImpl(values);
+            public int Value { get; set; }
+            public BSTNode Left { get; set; }
+            public BSTNode Right { get; set; }
         }
 
-
-        public static void InOrderTraversel(BSTNode root)
+        public static void Test()
         {
-            if (root.Left != null)
-                InOrderTraversel(root.Left);
+            var tree = new BinarySearchTree();
 
-            Console.WriteLine(root.Value);
+            tree.CreateBSTFor(new[] { 3, 100, 50, 200, -100, 35, 121, 2 });
+            tree.InOrderTraversel();
+            tree.BreathFirstSearch();
+            //var root = BinarySearchTree.CreateBSTFor(new[] { 3, 100, 50, 200, -100, 35, 121, 2 });
+            //BinarySearchTree.InOrderTraversel(root);
 
-            if (root.Right != null)
-                InOrderTraversel(root.Right);
+            //int findValue = -100;
+            //var node = BinarySearchTree.FindNode(root, findValue);
+            //if (node != null) Console.WriteLine($"{findValue} found");
+            //else Console.WriteLine($"{findValue} not found");
         }
 
-        private static BSTNode CreateBSTForImpl(IEnumerable<int> values)
+        private bool IsBST(BSTNode root, int min, int max)
         {
-            BSTNode root = null;
+            if (root == null)
+                return true;
 
-            foreach (var value in values)
+            if (root.Value < min || root.Value > max)
+                return false;
+
+            return IsBST(root.Left, min, root.Value - 1) && IsBST(root.Right, root.Value + 1, max);
+        }
+
+        private IEnumerable<BSTNode> GetLeavesOf(BSTNode node)
+        {
+            if (node == null)
+                yield break;
+
+            if (node.Left != null)
+                yield return node.Left;
+
+            if (node.Right != null)
+                yield return node.Right;
+        }
+
+        public void BreathFirstSearch()
+        {
+            var queue = new Queue<BSTNode>();
+            StringBuilder sb = new StringBuilder();
+
+            queue.Enqueue(_root);
+
+            while (queue.Count > 0)
             {
-                root = AddNodeToBST(root, value);
+                var node = queue.Dequeue();
+                sb.Append($"{node.Value},");
+
+                foreach (var leave in GetLeavesOf(node))
+                    queue.Enqueue(leave);
             }
 
-            return root;
+            Console.WriteLine("Breadth First Search");
+            Console.WriteLine(sb.ToString());
         }
 
-        private static BSTNode AddNodeToBST(BSTNode root, int value)
+        public void CreateBSTFor(IEnumerable<int> values)
+        {
+            foreach (var value in values)
+            {
+                _root = AddNodeToBST(_root, value);
+            }
+        }
+
+        BSTNode FindNode(BSTNode root, int value)
+        {
+            if (root == null)
+                return null;
+
+            if (root.Value == value)
+                return root;
+            else if (value < root.Value)
+                return FindNode(root.Left, value);
+            else
+                return FindNode(root.Right, value);
+        }
+
+
+        void InOrderTraversel()
+        {
+            InOrderTraverselImpl(_root);
+
+            void InOrderTraverselImpl(BSTNode root)
+            {
+                if (root.Left != null)
+                    InOrderTraverselImpl(root.Left);
+
+                Console.WriteLine(root.Value);
+
+                if (root.Right != null)
+                    InOrderTraverselImpl(root.Right);
+            }
+        }
+
+
+
+        BSTNode AddNodeToBST(BSTNode root, int value)
         {
             if (root == null)
             {
