@@ -14,7 +14,7 @@ namespace Datastructures
             //BinarySearchTree.Test();
             //AmazonTests.MaximumSubArray_v2();
 
-            AmazonTests.AllSubArrays(10,3);
+            AmazonTests.AllSubArrays(18,4);
 
 
             Console.ReadLine();
